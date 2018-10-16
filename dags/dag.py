@@ -23,7 +23,7 @@ dag = DAG(
         "start_date": dt.datetime(2018, 10, 1),
         "depends_on_past": True,
         "email_on_failure": True,
-        "email": "ghermann@bol.com",
+        "email": "airflow_errors@myorganisation.com",
     },
 )
 
