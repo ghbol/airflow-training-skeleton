@@ -8,7 +8,7 @@ print(dt)
 
 spark = SparkSession.builder.getOrCreate()
 
-input_path = "gs://airflowbolcom_ghermann_dummybucket/mypgdata"
+input_path = "gs://airflowbolcom_ghermann_dummybucket/mypgdata_*"
 # input_path = "gs://airflow-training-data/land_registry_price_paid_uk/*/*.json"
 
 spark.read.json(

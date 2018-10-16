@@ -28,9 +28,9 @@ dag = DAG(
 pg_2_gcs = PostgresToGoogleCloudStorageOperator(
     task_id="pg_2_gcs",
     postgres_conn_id="my_db_connection",
-    sql="SELECT COUNT(*) FROM land_registry_price_paid_uk",
+    sql="SELECT * FROM land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}'",
     bucket="airflowbolcom_ghermann_dummybucket",
-    filename="mypgdata",
+    filename="mypgdata_{{ ds }}",
     dag=dag
 )
 
