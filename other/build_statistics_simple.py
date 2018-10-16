@@ -38,17 +38,6 @@ spark.read.json(
 #  |-- transaction: string (nullable = true)
 #  |-- transfer_date: double (nullable = true)
 
-spark.read.json("gs://airflow-training-data/currency/*.json").withColumn(
-    "date", col("date").cast("date")
-).createOrReplaceTempView("currencies")
-
-# >>> df.printSchema()
-# root
-#  |-- conversion_rate: double (nullable = true)
-#  |-- date: string (nullable = true)
-#  |-- from: string (nullable = true)
-#  |-- to: string (nullable = true)
-
 # Do some aggregations and write it back to Cloud Storage
 aggregation = spark.sql(
     """
@@ -57,18 +46,12 @@ aggregation = spark.sql(
         county,
         district,
         city,
-        `to` as currency,
-        AVG(price * conversion_rate) as price
+        price
     FROM
         land_registry_price_paid_uk
-    JOIN
-        currencies
-    ON
-        currencies.date = land_registry_price_paid_uk.transfer_date
     WHERE
         transfer_date = '{}'
     GROUP BY
-        currency,
         transfer_date,
         county,
         district,
@@ -76,8 +59,7 @@ aggregation = spark.sql(
     ORDER BY
         county,
         district,
-        city,
-        currency
+        city
 """.format(
         dt
     )
