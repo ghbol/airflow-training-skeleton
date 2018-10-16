@@ -8,6 +8,8 @@ from airflow.contrib.operators.dataproc_operator import (
     DataProcPySparkOperator,
 )
 
+from airflow.utils.trigger_rule import TriggerRule
+
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 
 project_id = "airflowbolcom-4a6a6874aa7bb00c"
@@ -55,7 +57,6 @@ compute_aggregates = DataProcPySparkOperator(
     dag=dag,
 )
 
-from airflow.utils.trigger_rule import TriggerRule
 
 dataproc_delete_cluster = DataprocClusterDeleteOperator(
     task_id="my_delete_dp_cluster",
@@ -66,7 +67,6 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
 )
 
 pg_2_gcs >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
-
 
 
 def print_exec_date(**context):
