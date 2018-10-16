@@ -2,7 +2,7 @@ import datetime as dt
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-
+from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 
 dag = DAG(
     dag_id="my_first_dag",
@@ -16,6 +16,14 @@ dag = DAG(
     },
 )
 
+pg_2_gcs = PostgresToGoogleCloudStorageOperator(
+    task_id="pg_2_gcs",
+    postgres_conn_id="my_db_connection",
+    sql="SELECT COUNT(*) FROM gdd.land_registry_price_paid_uk",
+    bucket="airflowbolcom_ghermann_dummybucket",
+    filename="mypgdata",
+    dag=dag
+)
 
 def print_exec_date(**context):
     print(context["execution_date"])
