@@ -2,7 +2,15 @@ import datetime as dt
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
+from airflow.contrib.operators.dataproc_operator import (
+    DataprocClusterCreateOperator,
+    DataprocClusterDeleteOperator,
+    DataProcPySparkOperator,
+)
+
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+
+project_id = "airflowbolcom-4a6a6874aa7bb00c"
 
 dag = DAG(
     dag_id="uk_land_dag",
@@ -24,6 +32,41 @@ pg_2_gcs = PostgresToGoogleCloudStorageOperator(
     filename="mypgdata",
     dag=dag
 )
+
+zone = "europe-west4-a"
+
+dataproc_cluster_name = "my_dp_cluster_{{ ds }}"
+
+dataproc_create_cluster = DataprocClusterCreateOperator(
+    task_id="my_create_dp_cluster",
+    cluster_name=dataproc_cluster_name,
+    project_id=project_id,
+    num_workers=2,
+    zone=zone,
+    dag=dag,
+)
+
+compute_aggregates = DataProcPySparkOperator(
+    task_id="my_compute_aggregates",
+    main='gs://gdd-training-bucket/build_statistics.py',
+    cluster_name=dataproc_cluster_name,
+    arguments=["{{ ds }}"],
+    project_id=project_id,
+    dag=dag,
+)
+
+from airflow.utils.trigger_rule import TriggerRule
+
+dataproc_delete_cluster = DataprocClusterDeleteOperator(
+    task_id="my_delete_dp_cluster",
+    cluster_name=dataproc_cluster_name,
+    project_id=project_id,
+    trigger_rule=TriggerRule.ALL_DONE,
+    dag=dag,
+)
+
+pg_2_gcs >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+
 
 
 def print_exec_date(**context):
