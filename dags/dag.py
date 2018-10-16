@@ -16,7 +16,7 @@ project_id = "airflowbolcom-4a6a6874aa7bb00c"
 # project_id = "training-airflow"
 
 dag = DAG(
-    dag_id="uk_land_dag",
+    dag_id="uk_land_dag2",
     schedule_interval="30 7 * * *",
     default_args={
         "owner": "airflow",
