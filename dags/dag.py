@@ -51,7 +51,7 @@ dataproc_create_cluster = DataprocClusterCreateOperator(
 
 compute_aggregates = DataProcPySparkOperator(
     task_id="my_compute_aggregates",
-    main='gs://gdd-training-bucket/build_statistics.py',
+    main='gs://gdd-training-bucket/build_statistics_simple.py',
     cluster_name=dataproc_cluster_name,
     arguments=["{{ ds }}"],
     project_id=project_id,
