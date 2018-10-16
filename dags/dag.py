@@ -12,7 +12,8 @@ from airflow.utils.trigger_rule import TriggerRule
 
 from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 
-project_id = "airflowbolcom-4a6a6874aa7bb00c"
+# project_id = "airflowbolcom-4a6a6874aa7bb00c"
+project_id = "training-airflow"
 
 dag = DAG(
     dag_id="uk_land_dag",
