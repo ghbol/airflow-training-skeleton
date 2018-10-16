@@ -38,7 +38,7 @@ pg_2_gcs = PostgresToGoogleCloudStorageOperator(
 
 zone = "europe-west4-a"
 
-dataproc_cluster_name = "my_dp_cluster_{{ ds }}"
+dataproc_cluster_name = "my-dp-cluster-{{ ds }}"
 
 dataproc_create_cluster = DataprocClusterCreateOperator(
     task_id="my_create_dp_cluster",
