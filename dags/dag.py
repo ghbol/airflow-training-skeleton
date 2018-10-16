@@ -67,7 +67,7 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
 )
 
-pg_2_gcs >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
 
 
 def print_exec_date(**context):
