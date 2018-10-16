@@ -25,6 +25,7 @@ pg_2_gcs = PostgresToGoogleCloudStorageOperator(
     dag=dag
 )
 
+
 def print_exec_date(**context):
     print(context["execution_date"])
 
